@@ -27,7 +27,11 @@ public class ProductController {
 
     @GetMapping()
     public List<ProductResponseDto> getAllProduct(){
-        return null;
+
+        List<Product> products = productService.getAllProducts();
+
+        return products.stream()
+                .map(ProductResponseDto::fromProduct).toList();
     }
 
     @PostMapping
