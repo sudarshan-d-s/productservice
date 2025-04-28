@@ -9,7 +9,8 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ProductResponseDto {
+public class ProductRequestDto {
+
     private Long id;
     private String title;
     private String description;
@@ -23,8 +24,8 @@ public class ProductResponseDto {
                 .price(this.getPrice()).imageUrl(this.getImageUrl()).build();
     }
 
-    public static ProductResponseDto fromProduct(Product product){
-        return ProductResponseDto.builder().id(product.getId()).title(product.getTitle())
+    public static ProductRequestDto fromProduct(Product product){
+        return ProductRequestDto.builder().id(product.getId()).title(product.getTitle())
                 .description(product.getDescription()).categoryName(product.getCategory().getName())
                 .price(product.getPrice()).imageUrl(product.getImageUrl()).build();
     }

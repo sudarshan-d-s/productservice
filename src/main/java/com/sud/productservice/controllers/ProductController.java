@@ -1,6 +1,7 @@
 package com.sud.productservice.controllers;
 
 
+import com.sud.productservice.dtos.ProductRequestDto;
 import com.sud.productservice.dtos.ProductResponseDto;
 import com.sud.productservice.models.Product;
 import com.sud.productservice.services.ProductService;
@@ -35,18 +36,19 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product createProduct(){
-        return null;
+    public ProductResponseDto createProduct(@RequestBody ProductRequestDto productRequestDto){
+        Product prod = productService.createProduct(productRequestDto.toProduct());
+        return ProductResponseDto.fromProduct(prod);
     }
 
     @DeleteMapping("/{productId}")
     public void deleteProduct(@PathVariable Long productId){
-
+        productService.deleteProduct(productId);
     }
 
-    @PatchMapping("/{productId}")
-    public void updateProduct(@PathVariable Long productId){
-
+    @PutMapping()
+    public ProductResponseDto updateProduct(@RequestBody ProductRequestDto dto){
+        return ProductResponseDto.fromProduct(productService.updateProduct(dto.toProduct()));
     }
 
 }

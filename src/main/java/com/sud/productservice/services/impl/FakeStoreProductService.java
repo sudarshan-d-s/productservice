@@ -1,17 +1,14 @@
 package com.sud.productservice.services.impl;
 
-import com.sud.productservice.dtos.FakeStoreProductDto;
-import com.sud.productservice.models.Category;
+import com.sud.productservice.dtos.FakeStoreProductRequestDto;
+import com.sud.productservice.dtos.FakeStoreProductResponseDto;
 import com.sud.productservice.models.Product;
 import com.sud.productservice.services.ProductService;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -26,40 +23,69 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public Product getProductById(Long productId) {
-        FakeStoreProductDto fakeStoreProductDto = restTemplate.
-                getForObject(FAKESTORE_API_BASE_URL+productId, FakeStoreProductDto.class);
-        if(null == fakeStoreProductDto){
+        FakeStoreProductResponseDto fakeStoreProductResponseDto = restTemplate.
+                getForObject(FAKESTORE_API_BASE_URL+productId, FakeStoreProductResponseDto.class);
+        if(null == fakeStoreProductResponseDto){
             return null;
         }
-        return fakeStoreProductDto.toProduct();
+        return fakeStoreProductResponseDto.toProduct();
     }
 
     @Override
     public List<Product> getAllProducts() {
 
-        ResponseEntity<List<FakeStoreProductDto>> response = restTemplate.exchange(FAKESTORE_API_BASE_URL,
+        ResponseEntity<List<FakeStoreProductResponseDto>> response = restTemplate.exchange(FAKESTORE_API_BASE_URL,
                 HttpMethod.GET, null,
                 new ParameterizedTypeReference<>() {});
-        List<FakeStoreProductDto> list = response.getBody();
+        List<FakeStoreProductResponseDto> list = response.getBody();
         if(list == null){
             return null;
         }
-        return list.stream().map(FakeStoreProductDto::toProduct).toList();
+        return list.stream().map(FakeStoreProductResponseDto::toProduct).toList();
     }
 
     @Override
-    public FakeStoreProductDto createProduct(Product product) {
-        return restTemplate.postForObject(FAKESTORE_API_BASE_URL,
-                FakeStoreProductDto.fromProduct(product), FakeStoreProductDto.class);
+    public Product createProduct(Product product) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<FakeStoreProductRequestDto> requestEntity = new HttpEntity<>(
+                FakeStoreProductRequestDto.fromProduct(product), headers);
+
+        ResponseEntity<FakeStoreProductResponseDto> response = restTemplate.exchange(FAKESTORE_API_BASE_URL,
+                HttpMethod.POST, requestEntity,
+                FakeStoreProductResponseDto.class);
+        if(response.getBody() == null){
+            return null;
+        }
+        return response.getBody().toProduct();
     }
 
     @Override
-    public void updateProduct(Product product) {
-        restTemplate.put(FAKESTORE_API_BASE_URL+product.getId(), FakeStoreProductDto.fromProduct(product));
+    public Product updateProduct(Product product) {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<FakeStoreProductRequestDto> requestEntity = new HttpEntity<>(
+                FakeStoreProductRequestDto.fromProduct(product), headers);
+
+        ResponseEntity<FakeStoreProductResponseDto> response = restTemplate.exchange(FAKESTORE_API_BASE_URL+product.getId(),
+                HttpMethod.PUT, requestEntity,
+                FakeStoreProductResponseDto.class);
+        if(response.getBody() == null){
+            return null;
+        }
+        return response.getBody().toProduct();
+
+
     }
 
     @Override
     public void deleteProduct(Long productId) {
-        restTemplate.delete(FAKESTORE_API_BASE_URL + productId);
+        ResponseEntity<FakeStoreProductResponseDto> response = restTemplate.exchange(FAKESTORE_API_BASE_URL + productId,
+                HttpMethod.DELETE, null,
+                FakeStoreProductResponseDto.class);
     }
 }

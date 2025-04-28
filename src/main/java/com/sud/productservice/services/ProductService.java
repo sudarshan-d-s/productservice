@@ -1,6 +1,5 @@
 package com.sud.productservice.services;
 
-import com.sud.productservice.dtos.FakeStoreProductDto;
 import com.sud.productservice.models.Product;
 
 import java.util.List;
@@ -11,9 +10,9 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    FakeStoreProductDto createProduct(Product product);
+    Product createProduct(Product product);
 
-    void updateProduct(Product product);
+    Product updateProduct(Product product);
 
     void deleteProduct(Long productId);
 
