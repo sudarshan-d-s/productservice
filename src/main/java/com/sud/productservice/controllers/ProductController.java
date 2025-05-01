@@ -3,6 +3,7 @@ package com.sud.productservice.controllers;
 
 import com.sud.productservice.dtos.ProductRequestDto;
 import com.sud.productservice.dtos.ProductResponseDto;
+import com.sud.productservice.exceptions.ProductNotFoundException;
 import com.sud.productservice.models.Product;
 import com.sud.productservice.services.ProductService;
 import org.springframework.http.MediaType;
@@ -21,7 +22,7 @@ public class ProductController {
     }
 
     @GetMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ProductResponseDto getProductById(@PathVariable("productId") Long productId){
+    public ProductResponseDto getProductById(@PathVariable("productId") Long productId) throws ProductNotFoundException {
         Product product = productService.getProductById(productId);
         return ProductResponseDto.fromProduct(product);
     }

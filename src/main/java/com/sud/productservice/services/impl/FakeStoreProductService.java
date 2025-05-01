@@ -2,6 +2,7 @@ package com.sud.productservice.services.impl;
 
 import com.sud.productservice.dtos.FakeStoreProductRequestDto;
 import com.sud.productservice.dtos.FakeStoreProductResponseDto;
+import com.sud.productservice.exceptions.ProductNotFoundException;
 import com.sud.productservice.models.Product;
 import com.sud.productservice.services.ProductService;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,13 +23,15 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product getProductById(Long productId) {
-        FakeStoreProductResponseDto fakeStoreProductResponseDto = restTemplate.
-                getForObject(FAKESTORE_API_BASE_URL+productId, FakeStoreProductResponseDto.class);
-        if(null == fakeStoreProductResponseDto){
-            return null;
+    public Product getProductById(Long productId) throws ProductNotFoundException {
+        ResponseEntity<FakeStoreProductResponseDto> fakeStoreProductResponseDto = restTemplate.exchange(FAKESTORE_API_BASE_URL+productId,
+                HttpMethod.GET, null,
+                FakeStoreProductResponseDto.class);
+
+        if(null == fakeStoreProductResponseDto.getBody()){
+            throw new ProductNotFoundException(productId);
         }
-        return fakeStoreProductResponseDto.toProduct();
+        return fakeStoreProductResponseDto.getBody().toProduct();
     }
 
     @Override
@@ -88,4 +91,5 @@ public class FakeStoreProductService implements ProductService {
                 HttpMethod.DELETE, null,
                 FakeStoreProductResponseDto.class);
     }
+
 }
