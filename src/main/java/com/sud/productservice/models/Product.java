@@ -1,8 +1,9 @@
 package com.sud.productservice.models;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
-@Builder
 @Getter
 @Setter
 public class Product {

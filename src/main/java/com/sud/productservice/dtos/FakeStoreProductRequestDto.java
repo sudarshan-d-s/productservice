@@ -18,9 +18,16 @@ public class FakeStoreProductRequestDto {
     private String category;
 
     public Product toProduct(){
-        return Product.builder().id(this.getId()).title(this.getTitle()).
-                description(this.getDescription()).category(Category.builder().name(this.getCategory()).build())
-                .price(this.getPrice()).imageUrl(this.getImage()).build();
+        Product product = new Product();
+        Category cat = new Category();
+        cat.setName(category);
+        product.setId(id);
+        product.setTitle(title);
+        product.setDescription(description);
+        product.setCategory(cat);
+        product.setPrice(price);
+        product.setImageUrl(image);
+        return product;
     }
 
     public static FakeStoreProductRequestDto fromProduct(Product product){
