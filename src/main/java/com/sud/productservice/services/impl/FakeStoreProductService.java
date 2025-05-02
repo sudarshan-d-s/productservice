@@ -48,13 +48,16 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product createProduct(Product product) {
+    public Product createProduct(String title, String description, Double price,
+                                 String imageUrl, String categoryName) {
+        FakeStoreProductRequestDto requestDto = FakeStoreProductRequestDto.builder().title(title)
+                .description(description).category(categoryName).price(price).image(imageUrl).build();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<FakeStoreProductRequestDto> requestEntity = new HttpEntity<>(
-                FakeStoreProductRequestDto.fromProduct(product), headers);
+                requestDto, headers);
 
         ResponseEntity<FakeStoreProductResponseDto> response = restTemplate.exchange(FAKESTORE_API_BASE_URL,
                 HttpMethod.POST, requestEntity,

@@ -40,8 +40,14 @@ public class ProductController {
 
     @PostMapping
     public ProductResponseDto createProduct(@RequestBody ProductRequestDto productRequestDto){
-        Product prod = productService.createProduct(productRequestDto.toProduct());
-        return ProductResponseDto.fromProduct(prod);
+        Product product = productService.createProduct(
+                productRequestDto.getTitle(),
+                productRequestDto.getDescription(),
+                productRequestDto.getPrice(),
+                productRequestDto.getImageUrl(),
+                productRequestDto.getCategoryName()
+        );
+        return ProductResponseDto.fromProduct(product);
     }
 
     @DeleteMapping("/{productId}")
