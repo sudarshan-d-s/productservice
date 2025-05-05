@@ -25,19 +25,9 @@ class ProductControllerTest{
 
     @Test
     public  void testWhenGetByIdReturnResult() throws ProductNotFoundException {
-        Long productId = 1L;
 
-        Category category = new Category();
-        category.setId(2L);
-        category.setName("somecat");
-        category.setDescription("some desc");
-
-        Product product = new Product();
-        product.setId(productId);
-        product.setCategory(category);
-        product.setTitle("title");
-        product.setImageUrl("http://imageurl/img.jpg");
-        product.setPrice(30.00);
+        Product product = getDummyProduct();
+        Long productId = product.getId();
 
         Mockito.when(productService.getProductById(productId)).thenReturn(product);
 
@@ -50,5 +40,21 @@ class ProductControllerTest{
 
     }
 
+    private Product getDummyProduct(){
+        Long dummyProductId = 1L;
 
+        Category dummyCategory = new Category();
+        dummyCategory.setId(2L);
+        dummyCategory.setName("somecat");
+        dummyCategory.setDescription("some desc");
+
+        Product dummyProduct = new Product();
+        dummyProduct.setId(dummyProductId);
+        dummyProduct.setCategory(dummyCategory);
+        dummyProduct.setTitle("title");
+        dummyProduct.setImageUrl("http://imageurl/img.jpg");
+        dummyProduct.setPrice(30.00);
+
+        return dummyProduct;
+    }
 }
