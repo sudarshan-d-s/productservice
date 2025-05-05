@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Builder
 @Getter
 @Setter
@@ -32,8 +34,12 @@ public class ProductRequestDto {
     }
 
     public static ProductRequestDto fromProduct(Product product){
+        if(null == product){
+            return null;
+        }
         return ProductRequestDto.builder().id(product.getId()).title(product.getTitle())
-                .description(product.getDescription()).categoryName(product.getCategory().getName())
+                .description(product.getDescription()).categoryName(Optional.ofNullable(product.
+                        getCategory()).map(Category::getName).orElseGet(() -> null))
                 .price(product.getPrice()).imageUrl(product.getImageUrl()).build();
     }
 

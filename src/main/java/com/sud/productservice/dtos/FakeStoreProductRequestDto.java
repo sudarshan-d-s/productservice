@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @Getter
 @Setter
 @Builder
@@ -30,9 +32,13 @@ public class FakeStoreProductRequestDto {
         return product;
     }
 
-    public static FakeStoreProductRequestDto fromProduct(Product product){
+    public static FakeStoreProductRequestDto fromProduct(Product product) {
+        if (null == product) {
+            return null;
+        }
         return FakeStoreProductRequestDto.builder().id(product.getId()).title(product.getTitle())
-                .description(product.getDescription()).category(product.getCategory().getName())
+                .description(product.getDescription()).category(Optional.ofNullable(product.
+                        getCategory()).map(Category::getName).orElseGet(() -> null))
                 .price(product.getPrice()).image(product.getImageUrl()).build();
     }
 }
