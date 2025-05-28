@@ -57,10 +57,27 @@ class FakeStoreProductServiceTest {
 
     @Test
     void getAllProducts() {
+
     }
 
     @Test
-    void createProduct() {
+    void whenCreateProductThenReturnProduct() {
+        Product dummyProduct = getDummyProduct();
+
+        ResponseEntity<FakeStoreProductResponseDto> responseEntity = ResponseEntity.ok(
+                FakeStoreProductResponseDto.fromProduct(dummyProduct));
+
+        Mockito.when(restTemplate.exchange(Mockito.eq(FAKESTORE_API_BASE_URL),
+                Mockito.eq(HttpMethod.POST), Mockito.any(),
+                Mockito.eq(FakeStoreProductResponseDto.class))).thenReturn(responseEntity);
+
+        Product product = fakeStoreProductService.createProduct(dummyProduct.getTitle(),
+                dummyProduct.getDescription(), dummyProduct.getPrice(),
+                dummyProduct.getImageUrl(), dummyProduct.getCategory().getName());
+
+        Assertions.assertEquals(dummyProduct.getId(), product.getId());
+        Assertions.assertEquals(dummyProduct.getTitle(), product.getTitle());
+        Assertions.assertEquals(dummyProduct.getCategory().getName(), product.getCategory().getName());
     }
 
     @Test
