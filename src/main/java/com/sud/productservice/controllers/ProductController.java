@@ -52,14 +52,11 @@ public class ProductController {
             throw new RuntimeException("Invalid Token");
         }
 
-        Product product = productService.createProduct(
-                productRequestDto.getTitle(),
-                productRequestDto.getDescription(),
-                productRequestDto.getPrice(),
-                productRequestDto.getImageUrl(),
-                productRequestDto.getCategoryName()
-        );
-        return ProductResponseDto.fromProduct(product);
+        Product prod = productService.createProduct(productRequestDto.getTitle(),
+                productRequestDto.getTitle(),productRequestDto.getPrice(),
+                productRequestDto.getImageUrl(), productRequestDto.getCategoryName());
+
+        return ProductResponseDto.fromProduct(prod);
     }
 
     @DeleteMapping("/{productId}")

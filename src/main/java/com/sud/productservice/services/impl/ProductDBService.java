@@ -37,19 +37,12 @@ public class ProductDBService implements ProductService {
         product.setDescription(description);
         product.setPrice(price);
         product.setImageUrl(imageUrl);
-        return null;
+        return productRepository.save(product);
     }
-
-//    @Override
-//    public Product createProduct {
-//        Product prod = productRepository.save(product);
-//        return prod;
-//    }
 
     @Override
     public Product updateProduct(Product product) {
-        Product prod = productRepository.save(product);
-        return prod;
+        return productRepository.save(product);
     }
 
     @Override
